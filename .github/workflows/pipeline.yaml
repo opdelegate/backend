@@ -97,3 +97,4 @@ jobs:
             --capabilities CAPABILITY_IAM \
             --region ${DEV_REGION} \
             --no-fail-on-empty-changeset \
+            --no-confirm-changeset \

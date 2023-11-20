@@ -22,11 +22,10 @@ Resources:
       Timeout: 100
       Description: Cache daily data
       Events:
-        Api:
-          Type: Api
+        SubscriptionPopulator:
+          Type: Schedule
           Properties:
-            Path: /cache
-            Method: GET
+            Schedule: "cron(0 3 * * ? *)"
   # Each Lambda function is defined by properties:
   # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
 

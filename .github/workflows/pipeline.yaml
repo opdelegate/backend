@@ -64,9 +64,12 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: packaged.yaml
-          path: packaged.yaml
+          path: opdelegates-api/packaged.yaml
 
   deploy-dev:
+    defaults:
+      run:
+        working-directory: opdelegates-api
     timeout-minutes: 5
     if: github.ref == 'refs/heads/dev'
     needs: [build-and-package]
@@ -82,7 +85,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: packaged.yaml
-          path: opdelegates-api
+          path: opdelegates-api/packaged.yaml
 
       - name: Assume the dev pipeline user role
         uses: aws-actions/configure-aws-credentials@v1-node16
@@ -95,7 +98,6 @@ jobs:
           role-skip-session-tagging: true
 
       - name: Deploy to dev account
-        working-directory: opdelegates-api
         run: |
           sam deploy --stack-name ${DEV_STACK_NAME} \
             --template packaged.yaml \

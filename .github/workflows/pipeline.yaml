@@ -27,7 +27,7 @@ jobs:
   build-and-package:
     defaults:
       run:
-        working-directory: ./opdelegates-api
+        working-directory: opdelegates-api
     timeout-minutes: 3
     if: github.ref == 'refs/heads/dev'
     needs: []
@@ -70,7 +70,7 @@ jobs:
   deploy-dev:
     defaults:
       run:
-        working-directory: ./opdelegates-api
+        working-directory: opdelegates-api
     timeout-minutes: 5
     if: github.ref == 'refs/heads/dev'
     needs: [build-and-package]

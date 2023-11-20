@@ -64,7 +64,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: packaged.yaml
-          path: packaged.yaml
+          path: opdelegates-api/packaged.yaml
 
   deploy-dev:
     defaults:

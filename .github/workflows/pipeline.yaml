@@ -82,6 +82,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: packaged.yaml
+          path: opdelegates-api
 
       - name: Assume the dev pipeline user role
         uses: aws-actions/configure-aws-credentials@v1-node16

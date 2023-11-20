@@ -12,6 +12,7 @@ on:
   workflow_dispatch:
 
 env:
+  working-directory: opdelegates-api
   PIPELINE_USER_ACCESS_KEY_ID: ${{ secrets.SAM_AWS_ACCESS_KEY_ID }}
   PIPELINE_USER_SECRET_ACCESS_KEY: ${{ secrets.SAM_AWS_SECRET_ACCESS_KEY }}
   SAM_TEMPLATE: template.yml

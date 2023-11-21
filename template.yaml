@@ -18,8 +18,8 @@ Resources:
       Runtime: python3.9
       Architectures:
         - x86_64
-      MemorySize: 128
-      Timeout: 100
+      MemorySize: 512
+      Timeout: 900
       Description: Cache daily data
       Policies:
         - Version: "2012-10-17"
@@ -50,8 +50,8 @@ Resources:
       Runtime: python3.9
       Architectures:
         - x86_64
-      MemorySize: 128
-      Timeout: 100
+      MemorySize: 512
+      Timeout: 900
       Description: Get daily data from Dune Analytics
       Policies:
         - Version: "2012-10-17"

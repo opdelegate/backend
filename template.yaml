@@ -21,6 +21,16 @@ Resources:
       MemorySize: 128
       Timeout: 100
       Description: Cache daily data
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:Put*
+                - s3:PutObject
+                - s3:PutObjectAcl
+                - s3:GetObject
+              Resource: "*"
       Environment:
         Variables:
           API_KEY: !Sub "{{resolve:ssm:DUNE_API_KEY:1}}"
@@ -43,6 +53,13 @@ Resources:
       MemorySize: 128
       Timeout: 100
       Description: Get daily data from Dune Analytics
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+              Resource: "*"
       Events:
         Api:
           Type: Api

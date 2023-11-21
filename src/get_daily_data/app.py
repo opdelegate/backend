@@ -18,12 +18,17 @@ def lambda_handler(event, context):
         response = s3.get_object(Bucket=bucket_name, Key=s3_path)
         data = response['Body'].read().decode('utf-8')
 
+        # Dynamically set the 'Access-Control-Allow-Origin' header
+        allowed_origins = ['http://localhost:3000', 'https://opdelegates.com']
+        origin = event['headers'].get('Origin')
+        cors_header = {'Access-Control-Allow-Origin': origin} if origin in allowed_origins else {}
+
         return {
             'statusCode': 200,
             'body': data,
             'headers': {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'  # To allow for CORS
+                **cors_header  # Merge the dynamic CORS header
             }
         }
     except Exception as e:

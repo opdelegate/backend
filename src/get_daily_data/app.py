@@ -19,7 +19,7 @@ def lambda_handler(event, context):
         data = response['Body'].read().decode('utf-8')
 
         # Dynamically set the 'Access-Control-Allow-Origin' header
-        allowed_origins = ['http://localhost:3000', 'https://opdelegates.com']
+        allowed_origins = ['http://localhost:3000', 'https://opdelegate.com']
         origin = event['headers'].get('Origin')
         cors_header = {'Access-Control-Allow-Origin': origin} if origin in allowed_origins else {}
 

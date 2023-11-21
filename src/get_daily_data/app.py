@@ -28,7 +28,7 @@ def lambda_handler(event, context):
             'body': data,
             'headers': {
                 'Content-Type': 'application/json',
-                **cors_header  # Merge the dynamic CORS header
+                'Access-Control-Allow-Origin': 'http://localhost:3000',
             }
         }
     except Exception as e:

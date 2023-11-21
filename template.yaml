@@ -22,8 +22,8 @@ Resources:
       Timeout: 100
       Description: Cache daily data
       Environment:
-      Variables:
-        API_KEY: !Sub "{{resolve:ssm:DUNE_API_KEY:1}}"
+        Variables:
+          API_KEY: !Sub "{{resolve:ssm:DUNE_API_KEY:1}}"
       Events:
         SubscriptionPopulator:
           Type: Schedule

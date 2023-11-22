@@ -3,7 +3,6 @@ import os
 from datetime import datetime
 
 def lambda_handler(event, context):
-    print(event)
     # Parse the 'delegate' parameter from the incoming GET request
     delegate = event['multiValueQueryStringParameters']['delegate'][0].lower()
 
@@ -16,7 +15,7 @@ def lambda_handler(event, context):
 
     # Dynamically set the 'Access-Control-Allow-Origin' header
     allowed_origins = ['https://opdelegate.com']
-    origin = event['headers'].get('Origin')
+    origin = event['headers'].get('Origin') | event['headers'].get('origin')
     cors_header = {'Access-Control-Allow-Origin': origin} if origin in allowed_origins else {}
     # allow any localhost
     if origin and origin.startswith('http://localhost'):

@@ -10,9 +10,23 @@ Resources:
       Runtime: python3.9
       Architectures:
       - x86_64
-      MemorySize: 128
-      Timeout: 100
+      MemorySize: 512
+      Timeout: 900
       Description: Cache daily data
+      Policies:
+      - Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - s3:Put*
+          - s3:PutObject
+          - s3:PutObjectAcl
+          - s3:GetObject
+          Resource: '*'
+      Environment:
+        Variables:
+          API_KEY:
+            Fn::Sub: '{{resolve:ssm:DUNE_API_KEY:1}}'
       Events:
         SubscriptionPopulator:
           Type: Schedule
@@ -28,15 +42,22 @@ Resources:
       Runtime: python3.9
       Architectures:
       - x86_64
-      MemorySize: 128
-      Timeout: 100
+      MemorySize: 512
+      Timeout: 900
       Description: Get daily data from Dune Analytics
+      Policies:
+      - Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - s3:GetObject
+          Resource: '*'
       Events:
         Api:
           Type: Api
           Properties:
-            Path: /get_daily_data
-            Method: GET
+            Path: /get_daily_data/{proxy+}
+            Method: any
       CodeUri: getDailyDataFunction
     Metadata:
       SamResourceId: getDailyDataFunction

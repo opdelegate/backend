@@ -88,6 +88,10 @@ Outputs:
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/"
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
+  Api:
+    Cors:
+      AllowMethods: "'GET,POST,OPTIONS'"
+      AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Origin'"
   Function:
     LoggingConfig:
       LogFormat: JSON

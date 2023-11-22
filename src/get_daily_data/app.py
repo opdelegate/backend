@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 
 def lambda_handler(event, context):
+    print(event)
     # Parse the 'delegate' parameter from the incoming GET request
     delegate = event['multiValueQueryStringParameters']['delegate'][0].lower()
 
@@ -25,6 +26,10 @@ def lambda_handler(event, context):
         cors_header = {'Access-Control-Allow-Origin': origin}
 
     print(cors_header)
+
+    # if cors header is not set, set it to *
+    if not cors_header:
+        cors_header = {'Access-Control-Allow-Origin': '*'}
 
     try:
         # Fetch the JSON data from the specified S3 path

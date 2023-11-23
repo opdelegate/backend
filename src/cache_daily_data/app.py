@@ -6,7 +6,7 @@ import os
 
 def lambda_handler(event, context):
     
-    api_key = os.environ['API_KEY']
+    api_key = os.getenv('DUNE_API_KEY')
 
     # 1. Determine the target folder based on the current date.
     current_date = datetime.now().strftime('%Y-%m-%d')

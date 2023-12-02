@@ -1,6 +1,8 @@
 from datetime import datetime
 from collections import defaultdict
 import pandas as pd
+import boto3
+import os
 
 def group_events_by_day(events):
     grouped_events = defaultdict(list)
@@ -87,8 +89,13 @@ def calculate_cumulative_counts(top_delegates, daily_plus_minus):
     return delegate_cumulative_data
 
 def save_historical_counts(data_list, directory):
+    # s3 = boto3.client('s3')
+    # s3_path = f"opdelegate/your-path"
+    # s3.put_object(Bucket='opdelegate', Key=s3_path, Body=df.to_csv(index=False))
+
     #TODO change this function to saving to bucket s3://opdelegate/daily_num_delegators/
     # Ensure the directory exists
+    # @Michael this is probably not needed, you can use the above code to use s3 for it.
     if not os.path.exists(directory):
         os.makedirs(directory)
 
@@ -106,27 +113,35 @@ def save_historical_counts(data_list, directory):
 
 #TODO this should load from to https://s3.console.aws.amazon.com/s3/object/opdelegate?region=us-west-1&prefix=raw_events/updating_delegation_data.csv
 # Load data from CSV file
-full_filename = 'full_delegation_events.csv'
-df = pd.read_csv(full_filename)
 
-#TODO this should load from the top delegates list in the bucket
-#Load list of top 1000 delegates
-top_delegates_path = 'top_1000_delegates.csv'
 
-# Get the list of delegate addresses
-top_delegates = get_top_delegate_addresses(top_delegates_path)
+def lambda_handler(event, context):
 
-# Convert DataFrame to a list of dictionaries
-events = df.to_dict('records')
+    s3_path = f"opdelegate/full_delegation_events.csv"
+    bucket_name = 'opdelegate'
+    
+    s3 = boto3.client('s3')
+    response = s3.get_object(Bucket=bucket_name, Key=s3_path)
+    df = pd.read_csv(response)
 
-#group all events by day
-grouped_events = group_events_by_day(events)
+    #TODO this should load from the top delegates list in the bucket
+    #Load list of top 1000 delegates
+    top_delegates_path = 'top_1000_delegates.csv'
 
-#get daily plus/minus counts for each address
-daily_address_counts = calculate_daily_address_counts(grouped_events)
+    # Get the list of delegate addresses
+    top_delegates = get_top_delegate_addresses(top_delegates_path)
 
-full_counts = calculate_cumulative_counts(top_delegates, daily_address_counts)
+    # Convert DataFrame to a list of dictionaries
+    events = df.to_dict('records')
 
-#save counts to bucket
-#TODO change "directory" to bucket path
-save_historical_counts(full_counts, directory)
+    #group all events by day
+    grouped_events = group_events_by_day(events)
+
+    #get daily plus/minus counts for each address
+    daily_address_counts = calculate_daily_address_counts(grouped_events)
+
+    full_counts = calculate_cumulative_counts(top_delegates, daily_address_counts)
+
+    #save counts to bucket
+    #TODO change "directory" to bucket path
+    save_historical_counts(full_counts, directory)

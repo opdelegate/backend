@@ -41,7 +41,7 @@ Resources:
       Runtime: python3.9
       Architectures:
         - x86_64
-      MemorySize: 512
+      MemorySize: 3008
       Timeout: 900
       Description: Save individual counts
       Policies:

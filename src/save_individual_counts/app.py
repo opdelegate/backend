@@ -3,6 +3,9 @@ from collections import defaultdict
 import pandas as pd
 import boto3
 import os
+import json
+
+s3 = boto3.client('s3')
 
 def group_events_by_day(events):
     grouped_events = defaultdict(list)
@@ -88,60 +91,57 @@ def calculate_cumulative_counts(top_delegates, daily_plus_minus):
     
     return delegate_cumulative_data
 
-def save_historical_counts(data_list, directory):
-    # s3 = boto3.client('s3')
-    # s3_path = f"opdelegate/your-path"
-    # s3.put_object(Bucket='opdelegate', Key=s3_path, Body=df.to_csv(index=False))
-
-    #TODO change this function to saving to bucket s3://opdelegate/daily_num_delegators/
-    # Ensure the directory exists
-    # @Michael this is probably not needed, you can use the above code to use s3 for it.
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+def save_historical_counts(data_list):
+    s3_path = f"opdelegate/daily_num_delegators"
 
     for item in data_list:
         delegate_address = item['delegate']
         cumulative_counts = item['cumulative_counts']
 
-        #TODO change this to saving to bucket s3://opdelegate/daily_num_delegators/
         # Construct the file path
-        file_path = os.path.join(directory, f"{delegate_address}.json")
+        file_path = os.path.join(s3_path, f"{delegate_address}.json")
 
         # Write the cumulative_counts data to a JSON file
-        with open(file_path, 'w') as file:
-            json.dump(cumulative_counts, file, indent=4)
-
-#TODO this should load from to https://s3.console.aws.amazon.com/s3/object/opdelegate?region=us-west-1&prefix=raw_events/updating_delegation_data.csv
-# Load data from CSV file
-
+        s3.put_object(Bucket='opdelegate', Key=file_path, Body=json.dumps(cumulative_counts))
 
 def lambda_handler(event, context):
-
-    s3_path = f"opdelegate/full_delegation_events.csv"
+    s3_path = f"opdelegate/updating_delegation_data.csv"
     bucket_name = 'opdelegate'
+    print("Fetching data from S3 bucket...")
     
-    s3 = boto3.client('s3')
     response = s3.get_object(Bucket=bucket_name, Key=s3_path)
+    print("Data fetched successfully.")
+    
     df = pd.read_csv(response)
+    print("Data converted to DataFrame.")
 
-    #TODO this should load from the top delegates list in the bucket
     #Load list of top 1000 delegates
-    top_delegates_path = 'top_1000_delegates.csv'
+    top_delegates_path = 'opdelegate/top_1000_delegates.csv'
+    print("Loading list of top 1000 delegates...")
 
     # Get the list of delegate addresses
-    top_delegates = get_top_delegate_addresses(top_delegates_path)
+    top_delegates = s3.get_object(Bucket=bucket_name, Key=top_delegates_path)
+    print("List of top delegates fetched successfully.")
 
     # Convert DataFrame to a list of dictionaries
     events = df.to_dict('records')
+    print("Data converted to list of dictionaries.")
 
     #group all events by day
+    print("Grouping all events by day...")
     grouped_events = group_events_by_day(events)
+    print("Events grouped by day.")
 
     #get daily plus/minus counts for each address
+    print("Calculating daily plus/minus counts for each address...")
     daily_address_counts = calculate_daily_address_counts(grouped_events)
+    print("Daily counts calculated.")
 
+    print("Calculating cumulative counts...")
     full_counts = calculate_cumulative_counts(top_delegates, daily_address_counts)
+    print("Cumulative counts calculated.")
 
     #save counts to bucket
-    #TODO change "directory" to bucket path
-    save_historical_counts(full_counts, directory)
+    print("Saving historical counts to bucket...")
+    save_historical_counts(full_counts)
+    print("Historical counts saved successfully.")

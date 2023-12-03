@@ -5,6 +5,7 @@ import pandas as pd
 import pdb
 import os
 import json
+import boto3
 
 import requests
 from dune_client.types import QueryParameter
@@ -12,14 +13,14 @@ from dune_client.client import DuneClient
 from dune_client.query import QueryBase
 
 def lambda_handler(event, context):
-    #TODO this should load from to https://s3.console.aws.amazon.com/s3/object/opdelegate?region=us-west-1&prefix=raw_events/updating_delegation_data.csv
-    full_filename = 'updating_delegation_data.csv'
-    df_full = pd.read_csv(full_filename)
+    print("starting lambda handler")
+    s3_path = f"opdelegate/updating_delegation_data.csv"
+    bucket_name = 'opdelegate'
+    
+    s3 = boto3.client('s3')
+    response = s3.get_object(Bucket=bucket_name, Key=s3_path)
 
-
-    #TODO this should load the api key from secrets
-    # Load environment variables from .env file
-    load_dotenv()
+    df_full = pd.read_csv(response)
 
     # Access variables
     api_key = os.getenv('DUNE_API_KEY')
@@ -39,13 +40,12 @@ def lambda_handler(event, context):
 
     # Combine the two DataFrames
     combined_df = pd.concat([df_full, df_new])
-    print(len(combined_df))
+    print("length of combined dataframe: " + len(combined_df))
     # Drop duplicates
     combined_df = combined_df.drop_duplicates()
-    print(len(combined_df))
+    print("length without duplicates: " + len(combined_df))
     # Reset the index
     combined_df.reset_index(drop=True, inplace=True)
 
-    #TODO this should save to https://s3.console.aws.amazon.com/s3/object/opdelegate?region=us-west-1&prefix=raw_events/updating_delegation_data.csv
-    # Save the DataFrame to a CSV file
-    combined_df.to_csv('updating_delegation_data.csv', index=False)
+    s3.put_object(Bucket='opdelegate', Key=s3_path, Body=combined_df.to_csv(index=False))
+    print("saved to s3")

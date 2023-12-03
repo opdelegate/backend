@@ -1,16 +1,7 @@
-from dotenv import load_dotenv
-from datetime import datetime, timedelta
-from collections import defaultdict
 import pandas as pd
-import pdb
 import os
-import json
 import boto3
-
 import requests
-from dune_client.types import QueryParameter
-from dune_client.client import DuneClient
-from dune_client.query import QueryBase
 
 def lambda_handler(event, context):
     print("starting lambda handler")
@@ -47,5 +38,5 @@ def lambda_handler(event, context):
     # Reset the index
     combined_df.reset_index(drop=True, inplace=True)
 
-    s3.put_object(Bucket='opdelegate', Key=s3_path, Body=combined_df.to_csv(index=False))
+    s3.put_object(Bucket=bucket_name, Key=s3_path, Body=combined_df.to_csv(index=False))
     print("saved to s3")

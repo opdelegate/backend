@@ -33,14 +33,14 @@ def lambda_handler(event, context):
     print("opening the data in a dataframe")
     # This is a df with the new events
     df_new = pd.DataFrame(data)
-    print("length of new dataframe: " + len(df_new))
+    print("length of new dataframe: " + str(len(df_new)))
 
     # Combine the two DataFrames
     combined_df = pd.concat([df_full, df_new])
-    print("length of combined dataframe: " + len(combined_df))
+    print("length of combined dataframe: " + str(len(combined_df)))
     # Drop duplicates
     combined_df = combined_df.drop_duplicates()
-    print("length without duplicates: " + len(combined_df))
+    print("length without duplicates: " + str(len(combined_df)))
     # Reset the index
     combined_df.reset_index(drop=True, inplace=True)
 

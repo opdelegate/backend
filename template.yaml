@@ -119,7 +119,7 @@ Resources:
         SubscriptionPopulator:
           Type: Schedule
           Properties:
-            Schedule: "cron(0 3 * * ? *)"
+            Schedule: "cron(0 2 * * ? *)"
 
   getDailyDataFunction:
     Type: AWS::Serverless::Function

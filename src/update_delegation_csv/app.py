@@ -8,17 +8,19 @@ def lambda_handler(event, context):
     print("starting lambda handler")
     s3_path = "raw_events/updating_delegation_data.csv"
     bucket_name = 'opdelegate'
-    
+    print("create s3 client")
     s3 = boto3.client('s3')
     response = s3.get_object(Bucket=bucket_name, Key=s3_path)
     data = response['Body'].read().decode('utf-8')
-    
+    print("opening the data in a dataframe")
     df_full = pd.read_csv(data)
+    print("length of full dataframe: " + len(df_full))
 
     # Access variables
     api_key = os.getenv('DUNE_API_KEY')
 
     # 2. Get the JSON data from the URL.
+    print("getting the data from dune")
     results_URL = f"https://api.dune.com/api/v1/query/3222349/results?api_key={api_key}"
     response = requests.get(results_URL)
     all_data = response.json()

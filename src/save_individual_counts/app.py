@@ -4,6 +4,7 @@ import pandas as pd
 import boto3
 import os
 import json
+from io import StringIO
 
 s3 = boto3.client('s3')
 
@@ -112,7 +113,9 @@ def lambda_handler(event, context):
     response = s3.get_object(Bucket=bucket_name, Key=s3_path)
     print("Data fetched successfully.")
     
-    df = pd.read_csv(response)
+    data = response['Body'].read().decode('utf-8')
+    print("opening the data in a dataframe")
+    df = pd.read_csv(StringIO(data))
     print("Data converted to DataFrame.")
 
     #Load list of top 1000 delegates
@@ -120,7 +123,11 @@ def lambda_handler(event, context):
     print("Loading list of top 1000 delegates...")
 
     # Get the list of delegate addresses
-    top_delegates = s3.get_object(Bucket=bucket_name, Key=top_delegates_path)
+    top_delegates_s3_object = s3.get_object(Bucket=bucket_name, Key=top_delegates_path)
+    top_delegates = top_delegates_s3_object['Body'].read().decode('utf-8')
+    top_delegates_df = pd.read_csv(StringIO(top_delegates))
+    # create a list of the top 1000 delegates
+    top_delegates = top_delegates_df['delegate'].tolist()
     print("List of top delegates fetched successfully.")
 
     # Convert DataFrame to a list of dictionaries

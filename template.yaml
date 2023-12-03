@@ -166,7 +166,7 @@ Resources:
         Api:
           Type: Api
           Properties:
-            Path: /get_daily_data/{proxy+}
+            Path: /get_daily_delegates/{proxy+}
             Method: any
 
   ApplicationResourceGroup:

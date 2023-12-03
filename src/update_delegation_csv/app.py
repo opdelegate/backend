@@ -21,13 +21,16 @@ def lambda_handler(event, context):
     results_URL = f"https://api.dune.com/api/v1/query/3222349/results?api_key={api_key}"
     response = requests.get(results_URL)
     all_data = response.json()
+    print("got the data from dune")
     try: 
         data = all_data["result"]["rows"]
     except:
         print("something went wrong processing the data, here it is:")
 
-    #This is a df with the new events
+    print("opening the data in a dataframe")
+    # This is a df with the new events
     df_new = pd.DataFrame(data)
+    print("length of new dataframe: " + len(df_new))
 
     # Combine the two DataFrames
     combined_df = pd.concat([df_full, df_new])

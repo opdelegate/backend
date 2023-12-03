@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import boto3
 import requests
+from io import StringIO
 
 def lambda_handler(event, context):
     print("starting lambda handler")
@@ -29,7 +30,7 @@ def lambda_handler(event, context):
 
     print("opening the data in a dataframe")
     # This is a df with the new events
-    df_new = pd.DataFrame(data)
+    df_new = pd.read_csv(StringIO(data))
     print("length of new dataframe: " + len(df_new))
 
     # Combine the two DataFrames

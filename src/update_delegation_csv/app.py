@@ -10,8 +10,11 @@ def lambda_handler(event, context):
     
     s3 = boto3.client('s3')
     response = s3.get_object(Bucket=bucket_name, Key=s3_path)
+    data = response['Body'].read().decode('utf-8')
 
-    df_full = pd.read_csv(response)
+    print(data)
+
+    df_full = pd.read_csv(data)
 
     # Access variables
     api_key = os.getenv('DUNE_API_KEY')

@@ -145,6 +145,30 @@ Resources:
             Path: /get_daily_data/{proxy+}
             Method: any
 
+  getDailyDelegatesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/get_daily_delegates/app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 900
+      Description: Get daily data from Dune Analytics
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+              Resource: "*"
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /get_daily_data/{proxy+}
+            Method: any
+
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
     Properties:

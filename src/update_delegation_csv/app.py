@@ -14,7 +14,7 @@ from dune_client.query import QueryBase
 
 def lambda_handler(event, context):
     print("starting lambda handler")
-    s3_path = f"opdelegate/updating_delegation_data.csv"
+    s3_path = "raw_events/updating_delegation_data.csv"
     bucket_name = 'opdelegate'
     
     s3 = boto3.client('s3')

@@ -20,6 +20,6 @@ def lambda_handler(event, context):
     df = pd.DataFrame(data)
 
     s3 = boto3.client('s3')
-    s3_path = f"opdelegate/top_1000_delegates.csv"
+    s3_path = f"top_1000_delegates.csv"
     s3.put_object(Bucket='opdelegate', Key=s3_path, Body=df.to_csv(index=False))
 

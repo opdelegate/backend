@@ -63,7 +63,7 @@ def calculate_daily_address_counts(grouped_events):
 
 def lambda_handler(event, context):
     s3 = boto3.client('s3')
-    s3_path = f"opdelegate/top_1000_delegates.csv"
+    s3_path = f"top_1000_delegates.csv"
     top_delegates = s3.get_object(Bucket='opdelegate', Key=s3_path)
     # (Bucket='opdelegate', Key=s3_path, Body=df.to_csv(index=False))
     top_delegates = pd.read_csv(top_delegates['Body'])
@@ -87,7 +87,7 @@ def lambda_handler(event, context):
     daily_address_counts = calculate_daily_address_counts(grouped_events)
     # store each address in s3
     for day in daily_address_counts:
-        s3_file_path = f"opdelegate/daily_delegator_counts/{day['day']}.json"
+        s3_file_path = f"daily_delegator_counts/{day['day']}.json"
         s3.put_object(Bucket='opdelegate', Key=s3_file_path, Body=json.dumps(day['delegators']))
 
 lambda_handler(None, None)

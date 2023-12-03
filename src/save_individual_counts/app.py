@@ -92,7 +92,7 @@ def calculate_cumulative_counts(top_delegates, daily_plus_minus):
     return delegate_cumulative_data
 
 def save_historical_counts(data_list):
-    s3_path = f"opdelegate/daily_num_delegators"
+    s3_path = f"daily_num_delegators"
 
     for item in data_list:
         delegate_address = item['delegate']
@@ -105,7 +105,7 @@ def save_historical_counts(data_list):
         s3.put_object(Bucket='opdelegate', Key=file_path, Body=json.dumps(cumulative_counts))
 
 def lambda_handler(event, context):
-    s3_path = f"opdelegate/updating_delegation_data.csv"
+    s3_path = f"raw_events/updating_delegation_data.csv"
     bucket_name = 'opdelegate'
     print("Fetching data from S3 bucket...")
     
@@ -116,7 +116,7 @@ def lambda_handler(event, context):
     print("Data converted to DataFrame.")
 
     #Load list of top 1000 delegates
-    top_delegates_path = 'opdelegate/top_1000_delegates.csv'
+    top_delegates_path = 'top_1000_delegates.csv'
     print("Loading list of top 1000 delegates...")
 
     # Get the list of delegate addresses

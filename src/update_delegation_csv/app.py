@@ -14,7 +14,7 @@ def lambda_handler(event, context):
     data = response['Body'].read().decode('utf-8')
     print("opening the data in a dataframe")
     df_full = pd.read_csv(StringIO(data))
-    print("length of full dataframe: " + len(df_full))
+    print("length of full dataframe: " + str(len(df_full)))
 
     # Access variables
     api_key = os.getenv('DUNE_API_KEY')

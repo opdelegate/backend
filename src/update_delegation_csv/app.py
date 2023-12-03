@@ -13,7 +13,7 @@ def lambda_handler(event, context):
     response = s3.get_object(Bucket=bucket_name, Key=s3_path)
     data = response['Body'].read().decode('utf-8')
     print("opening the data in a dataframe")
-    df_full = pd.read_csv(data)
+    df_full = pd.DataFrame(data)
     print("length of full dataframe: " + len(df_full))
 
     # Access variables
@@ -32,7 +32,7 @@ def lambda_handler(event, context):
 
     print("opening the data in a dataframe")
     # This is a df with the new events
-    df_new = pd.read_csv(StringIO(data))
+    df_new = pd.DataFrame(data)
     print("length of new dataframe: " + len(df_new))
 
     # Combine the two DataFrames

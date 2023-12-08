@@ -17,7 +17,6 @@ def lambda_handler(event, context):
     print(results_URL)
     response = requests.get(results_URL)
     all_data = response.json()
-    print(all_data)
     data = all_data["result"]["rows"]
 
     date_format = "%Y-%m-%d %H:%M:%S.%f UTC"

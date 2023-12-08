@@ -27,7 +27,7 @@ Resources:
               Resource: "*"
       Environment:
         Variables:
-          DUNE_API_KEY: !Sub "{{resolve:ssm:DUNE_API_KEY:1}}"
+          DUNE_API_KEY: !Sub "{{resolve:ssm:DUNE_API_KEY:2}}"
       Events:
         SubscriptionPopulator:
           Type: Schedule
@@ -56,7 +56,7 @@ Resources:
               Resource: "*"
       Environment:
         Variables:
-          DUNE_API_KEY: !Sub "{{resolve:ssm:DUNE_API_KEY:1}}"
+          DUNE_API_KEY: !Sub "{{resolve:ssm:DUNE_API_KEY:2}}"
       Events:
         SubscriptionPopulator:
           Type: Schedule
@@ -85,7 +85,7 @@ Resources:
               Resource: "*"
       Environment:
         Variables:
-          DUNE_API_KEY: !Sub "{{resolve:ssm:DUNE_API_KEY:1}}"
+          DUNE_API_KEY: !Sub "{{resolve:ssm:DUNE_API_KEY:2}}"
       Events:
         SubscriptionPopulator:
           Type: Schedule
@@ -114,7 +114,7 @@ Resources:
               Resource: "*"
       Environment:
         Variables:
-          DUNE_API_KEY: !Sub "{{resolve:ssm:DUNE_API_KEY:1}}"
+          DUNE_API_KEY: !Sub "{{resolve:ssm:DUNE_API_KEY:2}}"
       Events:
         SubscriptionPopulator:
           Type: Schedule
@@ -143,7 +143,7 @@ Resources:
               Resource: "*"
       Environment:
         Variables:
-          DUNE_API_KEY: !Sub "{{resolve:ssm:DUNE_API_KEY:1}}"
+          DUNE_API_KEY: !Sub "{{resolve:ssm:DUNE_API_KEY:2}}"
       Events:
         SubscriptionPopulator:
           Type: Schedule

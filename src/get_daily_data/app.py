@@ -4,7 +4,7 @@ from datetime import datetime
 
 def lambda_handler(event, context):
     # Parse the 'delegate' parameter from the incoming GET request
-    delegate = event.get('multiValueQueryStringParameters').get('delegate').get(0).lower()
+    delegate = event.get('multiValueQueryStringParameters').get('delegate')[0].lower()
 
     # if delegate is not set, return 400
     if not delegate:

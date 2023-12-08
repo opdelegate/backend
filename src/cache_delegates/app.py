@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+#TODO do we actually need this?
 api_key = os.getenv('DUNE_API_KEY')
 
 def group_events_by_day(events):

@@ -16,6 +16,7 @@ def lambda_handler(event, context):
     results_URL = f"https://api.dune.com/api/v1/query/3004141/results?api_key={api_key}"
     response = requests.get(results_URL)
     all_data = response.json()
+    print(all_data)
     data = all_data["result"]["rows"]
 
     date_format = "%Y-%m-%d %H:%M:%S.%f UTC"

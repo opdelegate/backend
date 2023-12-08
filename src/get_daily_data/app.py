@@ -37,8 +37,6 @@ def lambda_handler(event, context):
     if origin and origin.endswith('.vercel.app'):
         cors_header = {'Access-Control-Allow-Origin': origin}
 
-    print(cors_header)
-
     # if cors header is not set, set it to *
     if not cors_header:
         cors_header = {'Access-Control-Allow-Origin': '*'}

@@ -14,6 +14,7 @@ def lambda_handler(event, context):
     
     # 2. Get the JSON data from the URL.
     results_URL = f"https://api.dune.com/api/v1/query/3004141/results?api_key={api_key}"
+    print(results_URL)
     response = requests.get(results_URL)
     all_data = response.json()
     print(all_data)

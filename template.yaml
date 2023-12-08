@@ -34,35 +34,6 @@ Resources:
           Properties:
             Schedule: "cron(0 3 * * ? *)"
 
-  cacheDailyDelegatesFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: src/cache_delegates/app.lambda_handler
-      Runtime: python3.9
-      Architectures:
-        - x86_64
-      MemorySize: 512
-      Timeout: 900
-      Description: Cache daily data
-      Policies:
-        - Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Action:
-                - s3:Put*
-                - s3:PutObject
-                - s3:PutObjectAcl
-                - s3:GetObject
-              Resource: "*"
-      Environment:
-        Variables:
-          DUNE_API_KEY: !Sub "{{resolve:ssm:DUNE_API_KEY:2}}"
-      Events:
-        SubscriptionPopulator:
-          Type: Schedule
-          Properties:
-            Schedule: "cron(0 3 * * ? *)"
-
   saveIndividualCountsFunction:
     Type: AWS::Serverless::Function
     Properties:

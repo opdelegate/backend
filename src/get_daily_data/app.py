@@ -55,6 +55,7 @@ def lambda_handler(event, context):
             }
         }
     except Exception as e:
+        cors_header = {'Access-Control-Allow-Origin': '*'}  # Define it here in case of an exception
         return {
             'statusCode': 500,
             'body': str(e),

@@ -1,6 +1,6 @@
 import boto3
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def lambda_handler(event, context):
     try:
@@ -44,6 +44,12 @@ def lambda_handler(event, context):
 
         # Fetch the JSON data from the specified S3 path
         response = s3.get_object(Bucket=bucket_name, Key=s3_path)
+        if response is None or response['Body'] is None or response['Body'].read() is None or response['Body'].read().decode('utf-8') == '':
+            # get the s3_path for yesterday
+            yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+            s3_path = f"daily_vote_data/{yesterday}/{delegate}.json"
+            response = s3.get_object(Bucket=bucket_name, Key=s3_path)
+
         data = response['Body'].read().decode('utf-8')
 
         return {

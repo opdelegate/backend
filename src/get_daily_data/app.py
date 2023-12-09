@@ -2,6 +2,26 @@ import boto3
 import os
 from datetime import datetime, timedelta
 
+bucket_name = 'opdelegate'
+s3 = boto3.client('s3')
+
+def get_last_day_data(delegate):
+    # Specify the S3 bucket and path
+    current_date = datetime.now()
+    s3_path = f"daily_vote_data/{current_date.strftime('%Y-%m-%d')}/{delegate}.json"
+    
+    # Fetch the JSON data from the specified S3 path
+    response = s3.get_object(Bucket=bucket_name, Key=s3_path)
+    counter = 0
+    while (response is None or response['Body'] is None or response['Body'].read() is None or response['Body'].read().decode('utf-8') == '') and counter < 10:
+        # get the s3_path for previous day
+        current_date -= timedelta(days=1)
+        s3_path = f"daily_vote_data/{current_date.strftime('%Y-%m-%d')}/{delegate}.json"
+        response = s3.get_object(Bucket=bucket_name, Key=s3_path)
+        counter += 1
+
+    return response['Body'].read().decode('utf-8')
+
 def lambda_handler(event, context):
     try:
         # Parse the 'delegate' parameter from the incoming GET request
@@ -17,13 +37,6 @@ def lambda_handler(event, context):
                     'Access-Control-Allow-Origin': '*',
                 }
             }
-
-        # Specify the S3 bucket and path
-        bucket_name = 'opdelegate'
-        current_date = datetime.now().strftime('%Y-%m-%d')
-        s3_path = f"daily_vote_data/{current_date}/{delegate}.json"
-        
-        s3 = boto3.client('s3')
 
         # Dynamically set the 'Access-Control-Allow-Origin' header
         allowed_origins = ['https://opdelegate.com']
@@ -42,15 +55,7 @@ def lambda_handler(event, context):
         if not cors_header:
             cors_header = {'Access-Control-Allow-Origin': '*'}
 
-        # Fetch the JSON data from the specified S3 path
-        response = s3.get_object(Bucket=bucket_name, Key=s3_path)
-        if response is None or response['Body'] is None or response['Body'].read() is None or response['Body'].read().decode('utf-8') == '':
-            # get the s3_path for yesterday
-            yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
-            s3_path = f"daily_vote_data/{yesterday}/{delegate}.json"
-            response = s3.get_object(Bucket=bucket_name, Key=s3_path)
-
-        data = response['Body'].read().decode('utf-8')
+        data = get_last_day_data(delegate)
 
         return {
             'statusCode': 200,

@@ -32,7 +32,7 @@ def get_last_day_data(delegate):
                 current_date -= timedelta(days=1)
                 counter += 1
                 data = ''  # Reset data to empty string
-        except s3.exceptions.AccessDenied:
+        except s3.exceptions.NoSuchKey:
             # If the specific key doesn't exist, go back one day and try again
             current_date -= timedelta(days=1)
             counter += 1

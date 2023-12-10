@@ -15,6 +15,8 @@ def get_last_day_data(delegate):
     counter = 0
     while (response is None or response['Body'] is None or response['Body'].read() is None or response['Body'].read().decode('utf-8') == '') and counter < 10:
         # get the s3_path for previous day
+        print(current_date)
+        print(s3_path)
         current_date -= timedelta(days=1)
         s3_path = f"daily_vote_data/{current_date.strftime('%Y-%m-%d')}/{delegate}.json"
         response = s3.get_object(Bucket=bucket_name, Key=s3_path)

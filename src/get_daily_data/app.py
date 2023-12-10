@@ -1,31 +1,47 @@
 import boto3
 import os
 from datetime import datetime, timedelta
+from botocore.exceptions import ClientError
+
+bucket_name = 'opdelegate'
+s3 = boto3.client('s3')
+
+import boto3
+import os
+from datetime import datetime, timedelta
 
 bucket_name = 'opdelegate'
 s3 = boto3.client('s3')
 
 def get_last_day_data(delegate):
-    # Specify the S3 bucket and path
     current_date = datetime.now()
-    s3_path = f"daily_vote_data/{current_date.strftime('%Y-%m-%d')}/{delegate}.json"
     
-    # Fetch the JSON data from the specified S3 path
-    response = s3.get_object(Bucket=bucket_name, Key=s3_path)
+    # Initialize variables
+    data = ''
     counter = 0
-    while (response is None or response['Body'] is None or response['Body'].read() is None or response['Body'].read().decode('utf-8') == '') and counter < 10:
-        # get the s3_path for previous day
-        print(current_date)
-        print(s3_path)
-        current_date -= timedelta(days=1)
+    max_retries = 10
+    
+    while data == '' and counter < max_retries:
         s3_path = f"daily_vote_data/{current_date.strftime('%Y-%m-%d')}/{delegate}.json"
-        response = s3.get_object(Bucket=bucket_name, Key=s3_path)
-        print(response)
-        print(response['Body'].read())
-        print(response['Body'].read().decode('utf-8'))
-        counter += 1
-
-    return response['Body'].read().decode('utf-8')
+        print(s3_path)
+        try:
+            response = s3.get_object(Bucket=bucket_name, Key=s3_path)
+            data = response['Body'].read().decode('utf-8')
+            # Check if data is empty and if so, set data to empty string and decrement the date
+            if not data:
+                current_date -= timedelta(days=1)
+                counter += 1
+                data = ''  # Reset data to empty string
+        except s3.exceptions.AccessDenied:
+            # If the specific key doesn't exist, go back one day and try again
+            current_date -= timedelta(days=1)
+            counter += 1
+        except Exception as e:
+            # For any other exceptions, print the error and break the loop
+            print(f"Error fetching data: {e}")
+            break
+    
+    return data if data else 'No data found'
 
 def lambda_handler(event, context):
     try:

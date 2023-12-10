@@ -32,10 +32,15 @@ def get_last_day_data(delegate):
                 current_date -= timedelta(days=1)
                 counter += 1
                 data = ''  # Reset data to empty string
-        except s3.exceptions.NoSuchKey:
-            # If the specific key doesn't exist, go back one day and try again
-            current_date -= timedelta(days=1)
-            counter += 1
+        except ClientError as E:
+            if e.response['Error']['Code'] == 'AccessDenied':
+                # If the specific key doesn't exist, go back one day and try again
+                current_date -= timedelta(days=1)
+                counter += 1
+            else:
+                # For any other S3 client exceptions, print the error and break the loop
+                print(f"Error fetching data from S3: {e}")
+                break
         except Exception as e:
             # For any other exceptions, print the error and break the loop
             print(f"Error fetching data: {e}")

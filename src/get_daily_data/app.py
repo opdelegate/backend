@@ -20,6 +20,9 @@ def get_last_day_data(delegate):
         current_date -= timedelta(days=1)
         s3_path = f"daily_vote_data/{current_date.strftime('%Y-%m-%d')}/{delegate}.json"
         response = s3.get_object(Bucket=bucket_name, Key=s3_path)
+        print(response)
+        print(response['Body'].read())
+        print(response['Body'].read().decode('utf-8'))
         counter += 1
 
     return response['Body'].read().decode('utf-8')

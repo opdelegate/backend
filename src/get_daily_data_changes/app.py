@@ -3,7 +3,6 @@ import os
 from datetime import datetime, timedelta
 from botocore.exceptions import ClientError
 import json
-import pandas as pd
 
 bucket_name = 'opdelegate'
 s3 = boto3.client('s3')

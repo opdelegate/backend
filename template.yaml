@@ -198,6 +198,31 @@ Resources:
             Path: /get_daily_delegates/{proxy+}
             Method: any
 
+  getTopDelegatorsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: get_top_delegators/app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 900
+      Description: Retrieve and serve top delegator data from S3
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+                - s3:PutObject
+              Resource: "*" # It's recommended to specify the exact bucket and object path for better security
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /get_top_delegators/{proxy+}
+            Method: any
+
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
     Properties:

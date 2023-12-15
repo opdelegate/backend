@@ -198,6 +198,54 @@ Resources:
             Path: /get_daily_delegates/{proxy+}
             Method: any
 
+  getDailyDataChangesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/get_daily_data_changes/app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 900
+      Description: Get daily changes from Dune Analytics
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+              Resource: "*"
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /get_daily_data_changes/{proxy+}
+            Method: any
+
+  getDailyDelegatesChangesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/get_daily_delegates_changes/app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 900
+      Description: Get daily delegates changes
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+              Resource: "*"
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /get_daily_delegates_changes/{proxy+}
+            Method: any
+
   getTopDelegatorsFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -245,6 +293,3 @@ Globals:
     Cors:
       AllowMethods: "'GET,POST,OPTIONS'"
       AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Origin'"
-  Function:
-    LoggingConfig:
-      LogFormat: JSON

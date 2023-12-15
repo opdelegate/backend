@@ -201,7 +201,7 @@ Resources:
   getTopDelegatorsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: get_top_delegators/app.lambda_handler
+      Handler: src/get_top_delegators/app.lambda_handler
       Runtime: python3.9
       Architectures:
         - x86_64

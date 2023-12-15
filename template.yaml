@@ -34,7 +34,7 @@ Resources:
           Properties:
             Schedule: "cron(0 3 * * ? *)"
 
-  cacheDailyDataFunction:
+  cacheTopDelegatorsFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: src/cache_top_delegators_by_delegate/app.lambda_handler

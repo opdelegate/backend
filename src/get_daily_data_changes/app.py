@@ -38,7 +38,7 @@ def calculate_daily_balance_difference(data):
 
         result.append({
             'date': current_date.strftime('%Y-%m-%d'),
-            'dailyBalanceDifference': rounded_difference
+            'dailyDifference': rounded_difference
         })
 
     result_json_string = json.dumps(result)

@@ -19,7 +19,7 @@ def calculate_daily_count_difference(data):
         # Round the values
         rounded_difference = int(daily_count_difference) if daily_count_difference.is_integer() else round(daily_count_difference, 1)
 
-        rounded_result.append({'day': data[i]['day'], 'dailyCountDifference': rounded_difference})
+        rounded_result.append({'date': data[i]['day'], 'dailyDifference': rounded_difference})
 
     result_json_string = json.dumps(rounded_result)
     return result_json_string

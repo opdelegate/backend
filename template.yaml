@@ -34,6 +34,35 @@ Resources:
           Properties:
             Schedule: "cron(0 3 * * ? *)"
 
+  cacheTopDelegatorsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/cache_top_delegators_by_delegate/app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 900
+      Description: Cache top delegators per delegate
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:Put*
+                - s3:PutObject
+                - s3:PutObjectAcl
+                - s3:GetObject
+              Resource: "*"
+      Environment:
+        Variables:
+          DUNE_API_KEY: !Sub "{{resolve:ssm:DUNE_API_KEY:2}}"
+      Events:
+        SubscriptionPopulator:
+          Type: Schedule
+          Properties:
+            Schedule: "cron(0 3 ? * 6 *)"
+
   saveIndividualCountsFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -168,6 +197,7 @@ Resources:
           Properties:
             Path: /get_daily_delegates/{proxy+}
             Method: any
+
   getDailyDataChangesFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -191,6 +221,7 @@ Resources:
           Properties:
             Path: /get_daily_data_changes/{proxy+}
             Method: any
+
   getDailyDelegatesChangesFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -214,6 +245,32 @@ Resources:
           Properties:
             Path: /get_daily_delegates_changes/{proxy+}
             Method: any
+
+  getTopDelegatorsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/get_top_delegators/app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 900
+      Description: Retrieve and serve top delegator data from S3
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+                - s3:PutObject
+              Resource: "*" # It's recommended to specify the exact bucket and object path for better security
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /get_top_delegators/{proxy+}
+            Method: any
+
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
     Properties:

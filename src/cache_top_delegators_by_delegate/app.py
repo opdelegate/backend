@@ -35,6 +35,7 @@ def lambda_handler(event, context):
 
     # 5. Write each group of delegate data to S3 as a JSON file.
     s3 = boto3.client('s3')
+    print(len(delegate_data))
     for delegate, rows in delegate_data.items():
         json_data = json.dumps(rows)
         s3_file_path = s3_path + f"{delegate}.json"

@@ -1,5 +1,5 @@
 import boto3
-from boto3 import ClientError
+from botocore.exceptions import ClientError
 
 def get_dune_api_key():
     secret_arn = "arn:aws:secretsmanager:us-east-2:185981372153:secret:DUNE_API_KEY-HaYNWw"

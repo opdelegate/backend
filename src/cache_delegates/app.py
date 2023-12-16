@@ -9,9 +9,7 @@ from dune_client.types import QueryParameter
 from dune_client.client import DuneClient
 from dune_client.query import QueryBase
 from dotenv import load_dotenv
-import sys
-sys.path.append('/opt')
-from utils import get_dune_api_key
+from src.get_secret import get_dune_api_key
 
 load_dotenv()
 

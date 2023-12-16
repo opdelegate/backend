@@ -2,9 +2,7 @@ import requests
 import os
 import boto3
 import pandas as pd
-import sys
-sys.path.append('/opt')
-from utils import get_dune_api_key
+from src.get_secret import get_dune_api_key
 
 def lambda_handler(event, context):
     api_key = os.getenv('DUNE_API_KEY')

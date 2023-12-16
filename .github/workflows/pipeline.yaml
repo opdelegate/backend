@@ -17,7 +17,7 @@ env:
   SAM_TEMPLATE: template.yml
 
   DEV_STACK_NAME: sam-app
-  PROD_STACK_NAME: OPDelegatesApp
+  PROD_STACK_NAME: opdelegates-api
   # If there are functions with "Image" PackageType in your template,
   # uncomment the line below and add "--image-repository ${DEV_IMAGE_REPOSITORY}" to
   # dev "sam package" and "sam deploy" commands.

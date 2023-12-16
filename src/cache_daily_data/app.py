@@ -3,10 +3,13 @@ import json
 from datetime import datetime, timedelta
 import boto3
 import os
+from utils.get_secret import get_dune_api_key
 
 def lambda_handler(event, context):
     
     api_key = os.getenv('DUNE_API_KEY')
+    if api_key is None:
+        api_key = get_dune_api_key()
 
     # 1. Determine the target folder based on the current date.
     current_date = datetime.now().strftime('%Y-%m-%d')

@@ -3,6 +3,7 @@ import os
 import boto3
 import requests
 from io import StringIO
+from utils.get_secret import get_dune_api_key
 
 def lambda_handler(event, context):
     print("starting lambda handler")
@@ -18,6 +19,8 @@ def lambda_handler(event, context):
 
     # Access variables
     api_key = os.getenv('DUNE_API_KEY')
+    if api_key is None:
+        api_key = get_dune_api_key()
 
     # 2. Get the JSON data from the URL.
     print("getting the data from dune")

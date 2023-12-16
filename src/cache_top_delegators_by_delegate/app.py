@@ -8,6 +8,9 @@ import pandas as pd
 def lambda_handler(event, context):
     
     api_key = os.getenv('DUNE_API_KEY')
+    if api_key is None:
+        api_key = get_dune_api_key()
+
     s3_path = f"top_delegators_by_delegate/"
     bucket_name = 'opdelegate'
     top_delegates_path = 'top_1000_delegates.csv'

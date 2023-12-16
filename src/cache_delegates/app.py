@@ -9,11 +9,14 @@ from dune_client.types import QueryParameter
 from dune_client.client import DuneClient
 from dune_client.query import QueryBase
 from dotenv import load_dotenv
+from utils.get_secret import get_dune_api_key
 
 load_dotenv()
 
 #TODO do we actually need this?
 api_key = os.getenv('DUNE_API_KEY')
+if api_key is None:
+    api_key = get_dune_api_key()
 
 def group_events_by_day(events):
     grouped_events = defaultdict(list)

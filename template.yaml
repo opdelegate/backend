@@ -16,6 +16,8 @@ Resources:
       Timeout: 900
       Description: Cache daily data
       Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+          DuneApiKeyArn: !Sub "arn:aws:secretsmanager:us-east-2:185981372153:secret:DUNE_API_KEY-HaYNWw"
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow
@@ -25,9 +27,6 @@ Resources:
                 - s3:PutObjectAcl
                 - s3:GetObject
               Resource: "*"
-      Environment:
-        Variables:
-          DUNE_API_KEY: !Sub "arn:aws:secretsmanager:us-east-2:185981372153:secret:DUNE_API_KEY-HaYNWw"
       Events:
         SubscriptionPopulator:
           Type: Schedule
@@ -45,6 +44,8 @@ Resources:
       Timeout: 900
       Description: Cache top delegators per delegate
       Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+          DuneApiKeyArn: !Sub "arn:aws:secretsmanager:us-east-2:185981372153:secret:DUNE_API_KEY-HaYNWw"
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow
@@ -54,9 +55,6 @@ Resources:
                 - s3:PutObjectAcl
                 - s3:GetObject
               Resource: "*"
-      Environment:
-        Variables:
-          DUNE_API_KEY: !Sub "arn:aws:secretsmanager:us-east-2:185981372153:secret:DUNE_API_KEY-HaYNWw"
       Events:
         SubscriptionPopulator:
           Type: Schedule
@@ -74,6 +72,8 @@ Resources:
       Timeout: 900
       Description: Save individual counts
       Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+          DuneApiKeyArn: !Sub "arn:aws:secretsmanager:us-east-2:185981372153:secret:DUNE_API_KEY-HaYNWw"
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow
@@ -83,9 +83,6 @@ Resources:
                 - s3:PutObjectAcl
                 - s3:GetObject
               Resource: "*"
-      Environment:
-        Variables:
-          DUNE_API_KEY: !Sub "arn:aws:secretsmanager:us-east-2:185981372153:secret:DUNE_API_KEY-HaYNWw"
       Events:
         SubscriptionPopulator:
           Type: Schedule
@@ -103,6 +100,8 @@ Resources:
       Timeout: 900
       Description: Update Delegation CSV
       Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+          DuneApiKeyArn: !Sub "arn:aws:secretsmanager:us-east-2:185981372153:secret:DUNE_API_KEY-HaYNWw"
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow
@@ -112,9 +111,6 @@ Resources:
                 - s3:PutObjectAcl
                 - s3:GetObject
               Resource: "*"
-      Environment:
-        Variables:
-          DUNE_API_KEY: !Sub "arn:aws:secretsmanager:us-east-2:185981372153:secret:DUNE_API_KEY-HaYNWw"
       Events:
         SubscriptionPopulator:
           Type: Schedule
@@ -132,6 +128,8 @@ Resources:
       Timeout: 900
       Description: Cache top wallets
       Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+          DuneApiKeyArn: !Sub "arn:aws:secretsmanager:us-east-2:185981372153:secret:DUNE_API_KEY-HaYNWw"
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow
@@ -141,9 +139,6 @@ Resources:
                 - s3:PutObjectAcl
                 - s3:GetObject
               Resource: "*"
-      Environment:
-        Variables:
-          DUNE_API_KEY: !Sub "arn:aws:secretsmanager:us-east-2:185981372153:secret:DUNE_API_KEY-HaYNWw"
       Events:
         SubscriptionPopulator:
           Type: Schedule

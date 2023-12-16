@@ -125,6 +125,7 @@ jobs:
             --region ${DEV_REGION} \
             --no-fail-on-empty-changeset \
             --no-confirm-changeset \
+            --debug
 
   deploy-prod:
     if: github.ref == 'refs/heads/prod'
@@ -160,3 +161,4 @@ jobs:
             --region ${PROD_REGION} \
             --no-fail-on-empty-changeset \
             --no-confirm-changeset \
+            --debug

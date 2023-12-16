@@ -15,9 +15,8 @@ Resources:
       MemorySize: 512
       Timeout: 900
       Description: Cache daily data
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSSecretsManagerGetSecretValuePolicy
       Policies:
+        - arn:aws:iam::aws:policy/AWSSecretsManagerGetSecretValuePolicy
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow
@@ -43,9 +42,8 @@ Resources:
       MemorySize: 512
       Timeout: 900
       Description: Cache top delegators per delegate
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSSecretsManagerGetSecretValuePolicy
       Policies:
+        - arn:aws:iam::aws:policy/AWSSecretsManagerGetSecretValuePolicy
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow
@@ -71,9 +69,8 @@ Resources:
       MemorySize: 3008
       Timeout: 900
       Description: Save individual counts
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSSecretsManagerGetSecretValuePolicy
       Policies:
+        - arn:aws:iam::aws:policy/AWSSecretsManagerGetSecretValuePolicy
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow
@@ -99,9 +96,8 @@ Resources:
       MemorySize: 3008
       Timeout: 900
       Description: Update Delegation CSV
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSSecretsManagerGetSecretValuePolicy
       Policies:
+        - arn:aws:iam::aws:policy/AWSSecretsManagerGetSecretValuePolicy
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow
@@ -127,9 +123,8 @@ Resources:
       MemorySize: 512
       Timeout: 900
       Description: Cache top wallets
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSSecretsManagerGetSecretValuePolicy
       Policies:
+        - arn:aws:iam::aws:policy/AWSSecretsManagerGetSecretValuePolicy
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow

@@ -16,7 +16,7 @@ Resources:
       Timeout: 900
       Description: Cache daily data
       Policies:
-        - arn:aws:iam::aws:policy/AWSSecretsManagerGetSecretValuePolicy
+        - arn:aws:iam::aws:policy/SecretsManagerReadWrite
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow
@@ -43,7 +43,7 @@ Resources:
       Timeout: 900
       Description: Cache top delegators per delegate
       Policies:
-        - arn:aws:iam::aws:policy/AWSSecretsManagerGetSecretValuePolicy
+        - arn:aws:iam::aws:policy/SecretsManagerReadWrite
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow
@@ -70,7 +70,7 @@ Resources:
       Timeout: 900
       Description: Save individual counts
       Policies:
-        - arn:aws:iam::aws:policy/AWSSecretsManagerGetSecretValuePolicy
+        - arn:aws:iam::aws:policy/SecretsManagerReadWrite
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow
@@ -97,7 +97,7 @@ Resources:
       Timeout: 900
       Description: Update Delegation CSV
       Policies:
-        - arn:aws:iam::aws:policy/AWSSecretsManagerGetSecretValuePolicy
+        - arn:aws:iam::aws:policy/SecretsManagerReadWrite
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow
@@ -124,7 +124,7 @@ Resources:
       Timeout: 900
       Description: Cache top wallets
       Policies:
-        - arn:aws:iam::aws:policy/AWSSecretsManagerGetSecretValuePolicy
+        - arn:aws:iam::aws:policy/SecretsManagerReadWrite
         - Version: "2012-10-17"
           Statement:
             - Effect: Allow

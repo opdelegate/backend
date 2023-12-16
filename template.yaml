@@ -10,7 +10,7 @@ Resources:
     Properties:
       LayerName: SharedUtilsLayer
       Description: Layer for shared utils
-      ContentUri: ./utils/
+      ContentUri: src/utils/
       CompatibleRuntimes:
         - python3.9
   cacheDailyDataFunction:

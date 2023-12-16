@@ -19,10 +19,6 @@ env:
 
   DEV_STACK_NAME: sam-app
   PROD_STACK_NAME: opdelegates-api
-  # If there are functions with "Image" PackageType in your template,
-  # uncomment the line below and add "--image-repository ${DEV_IMAGE_REPOSITORY}" to
-  # dev "sam package" and "sam deploy" commands.
-  # DEV_IMAGE_REPOSITORY = '0123456789.dkr.ecr.region.amazonaws.com/repository-name'
   DEV_REGION: us-east-1
   PROD_REGION: us-east-2
 
@@ -125,6 +121,7 @@ jobs:
             --region ${DEV_REGION} \
             --no-fail-on-empty-changeset \
             --no-confirm-changeset \
+            --parameter-overrides 'EnvironmentVariables={DEV=1}' \
             --debug
 
   deploy-prod:

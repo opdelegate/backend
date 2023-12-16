@@ -6,6 +6,8 @@ from utils.get_secret import get_dune_api_key
 
 def lambda_handler(event, context):
     api_key = os.getenv('DUNE_API_KEY')
+    if api_key is None:
+        api_key = get_dune_api_key()
 
     # 1. Get the JSON data from the URL.
     results_URL = f"https://api.dune.com/api/v1/query/871360/results?api_key={api_key}"

@@ -4,6 +4,7 @@ import boto3
 import os
 from io import StringIO
 import pandas as pd
+from utils.get_secret import get_dune_api_key
 
 def lambda_handler(event, context):
     

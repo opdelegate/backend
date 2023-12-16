@@ -3,7 +3,7 @@ from botocore.exceptions import ClientError
 
 def get_dune_api_key():
     secret_arn = "arn:aws:secretsmanager:us-east-2:185981372153:secret:DUNE_API_KEY-HaYNWw"
-    region_name = "us-east-1"
+    region_name = "us-east-2"
 
     session = boto3.session.Session()
     client = session.client(

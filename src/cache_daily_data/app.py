@@ -3,7 +3,9 @@ import json
 from datetime import datetime, timedelta
 import boto3
 import os
-from utils.get_secret import get_dune_api_key
+import sys
+sys.path.append('/opt')
+from utils import get_dune_api_key
 
 def lambda_handler(event, context):
     

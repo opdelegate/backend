@@ -3,7 +3,9 @@ import os
 import boto3
 import requests
 from io import StringIO
-from utils.get_secret import get_dune_api_key
+import sys
+sys.path.append('/opt')
+from utils import get_dune_api_key
 
 def lambda_handler(event, context):
     print("starting lambda handler")

@@ -5,6 +5,14 @@ Transform:
   - AWS::Serverless-2016-10-31
 
 Resources:
+  SharedUtilsLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: SharedUtilsLayer
+      Description: Layer for shared utils
+      ContentUri: ./utils/
+      CompatibleRuntimes:
+        - python3.9
   cacheDailyDataFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -15,6 +23,8 @@ Resources:
       MemorySize: 512
       Timeout: 900
       Description: Cache daily data
+      Layers:
+        - !Ref SharedUtilsLayer
       Policies:
         - Version: "2012-10-17"
           Statement:
@@ -42,6 +52,8 @@ Resources:
       MemorySize: 512
       Timeout: 900
       Description: Cache top delegators per delegate
+      Layers:
+        - !Ref SharedUtilsLayer
       Policies:
         - Version: "2012-10-17"
           Statement:
@@ -69,6 +81,8 @@ Resources:
       MemorySize: 3008
       Timeout: 900
       Description: Save individual counts
+      Layers:
+        - !Ref SharedUtilsLayer
       Policies:
         - Version: "2012-10-17"
           Statement:
@@ -96,6 +110,8 @@ Resources:
       MemorySize: 3008
       Timeout: 900
       Description: Update Delegation CSV
+      Layers:
+        - !Ref SharedUtilsLayer
       Policies:
         - Version: "2012-10-17"
           Statement:
@@ -123,6 +139,8 @@ Resources:
       MemorySize: 512
       Timeout: 900
       Description: Cache top wallets
+      Layers:
+        - !Ref SharedUtilsLayer
       Policies:
         - Version: "2012-10-17"
           Statement:

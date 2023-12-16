@@ -13,9 +13,10 @@ def get_dune_api_key():
 
     try:
         # get secret by arn
-        return client.get_secret_value(
+        result = client.get_secret_value(
             SecretId=secret_arn
         )
+        return result['SecretString']
     except ClientError as e:
         if e.response['Error']['Code'] == 'ResourceNotFoundException':
             print("The requested secret " + secret_arn + " was not found")

@@ -66,6 +66,12 @@ def calculate_daily_address_counts(grouped_events):
     return daily_address_counts
 
 def lambda_handler(event, context):
+    # if DEV is set, skip this function
+    if os.getenv('DEV') == 'true':
+        return {
+            'statusCode': 200,
+            'body': 'DEV is set to true, skipping this function'
+        }
     s3 = boto3.client('s3')
     s3_path = f"top_1000_delegates.csv"
     top_delegates = s3.get_object(Bucket='opdelegate', Key=s3_path)

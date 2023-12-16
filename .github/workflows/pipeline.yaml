@@ -121,7 +121,7 @@ jobs:
             --region ${DEV_REGION} \
             --no-fail-on-empty-changeset \
             --no-confirm-changeset \
-            --parameter-overrides 'EnvironmentVariables={DEV=1}' \
+            --parameter-overrides 'EnvironmentVariables={DEV=true}' \
             --debug
 
   deploy-prod:

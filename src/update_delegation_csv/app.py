@@ -6,6 +6,13 @@ from io import StringIO
 from src.get_secret import get_dune_api_key
 
 def lambda_handler(event, context):
+    # if DEV is set, skip this function
+    if os.getenv('DEV') == 'true':
+        return {
+            'statusCode': 200,
+            'body': 'DEV is set to true, skipping this function'
+        }
+
     print("starting lambda handler")
     s3_path = "raw_events/updating_delegation_data.csv"
     bucket_name = 'opdelegate'

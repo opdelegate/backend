@@ -7,7 +7,12 @@ import os
 from src.get_secret import get_dune_api_key
 
 def lambda_handler(event, context):
-    
+    # if DEV is set, skip this function
+    if os.getenv('DEV') == 'true':
+        return {
+            'statusCode': 200,
+            'body': 'DEV is set to true, skipping this function'
+        }
     api_key = os.getenv('DUNE_API_KEY')
     if api_key is None:
         api_key = get_dune_api_key()

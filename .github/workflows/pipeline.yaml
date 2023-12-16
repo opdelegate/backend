@@ -17,11 +17,13 @@ env:
   SAM_TEMPLATE: template.yml
 
   DEV_STACK_NAME: sam-app
+  PROD_STACK_NAME: OPDelegatesApp
   # If there are functions with "Image" PackageType in your template,
   # uncomment the line below and add "--image-repository ${DEV_IMAGE_REPOSITORY}" to
   # dev "sam package" and "sam deploy" commands.
   # DEV_IMAGE_REPOSITORY = '0123456789.dkr.ecr.region.amazonaws.com/repository-name'
   DEV_REGION: us-east-1
+  PROD_REGION: us-east-2
 
 jobs:
   build-and-package:
@@ -56,12 +58,33 @@ jobs:
         run: |
           sam package \
             --region ${DEV_REGION} \
-            --output-template-file packaged.yaml
+            --output-template-file packaged-dev.yaml
 
       - uses: actions/upload-artifact@v3
         with:
-          name: packaged.yaml
-          path: packaged.yaml
+          name: packaged-dev.yaml
+          path: packaged-dev.yaml
+
+      - name: Assume the production pipeline user role
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.PROD_REGION }}
+          role-session-name: production-packaging
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+
+      - name: Upload artifacts to production artifact buckets
+        run: |
+          sam package \
+            --region ${PROD_REGION} \
+            --output-template-file packaged-prod.yaml
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: packaged-prod.yaml
+          path: packaged-prod.yaml
 
   deploy-dev:
     timeout-minutes: 5
@@ -78,7 +101,7 @@ jobs:
           use-installer: true
       - uses: actions/download-artifact@v3
         with:
-          name: packaged.yaml
+          name: packaged-dev.yaml
 
       - name: Assume the dev pipeline user role
         uses: aws-actions/configure-aws-credentials@v1-node16
@@ -93,8 +116,43 @@ jobs:
       - name: Deploy to dev account
         run: |
           sam deploy --stack-name ${DEV_STACK_NAME} \
-            --template packaged.yaml \
+            --template packaged-dev.yaml \
             --capabilities CAPABILITY_IAM \
             --region ${DEV_REGION} \
+            --no-fail-on-empty-changeset \
+            --no-confirm-changeset \
+  deploy-prod:
+    timeout-minutes: 5
+    if: github.ref == 'refs/heads/prod'
+    needs: [build-and-package]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+      - uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+      - uses: actions/download-artifact@v3
+        with:
+          name: packaged-prod.yaml
+
+      - name: Assume the prod pipeline user role
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.PROD_REGION }}
+          role-session-name: prod-deployment
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+
+      - name: Deploy to prod account
+        run: |
+          sam deploy --stack-name ${PROD_STACK_NAME} \
+            --template packaged-prod.yaml \
+            --capabilities CAPABILITY_IAM \
+            --region ${PROD_REGION} \
             --no-fail-on-empty-changeset \
             --no-confirm-changeset \

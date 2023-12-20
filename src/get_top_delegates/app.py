@@ -13,28 +13,6 @@ def lambda_handler(event, context):
         s3_path = f"top_1000_delegates.csv"
         top_delegates = s3.get_object(Bucket='opdelegate', Key=s3_path)
         # (Bucket='opdelegate', Key=s3_path, Body=df.to_csv(index=False))
-        top_delegates = pd.read_csv(top_delegates['Body'])
-        top_delegates_df = pd.DataFrame(top_delegates)
-
-        selected_columns = ['delegate_rank', 'delegate', 'delegate_name', 'dt_voting_power', 'pct_voting_power']
-        selected_df = top_delegates_df[selected_columns]
-        print(selected_df.head())
-
-        # Add a new 'ens_domain' column by applying the get_ens_domain function
-        selected_df.loc[:, 'ens_domain'] = selected_df['delegate_name'].apply(extract_ens_name)
-
-        # Remove the 'delegate' column
-        selected_df = selected_df.drop(columns=['delegate_name'])
-
-        # Rename columns if needed
-        new_column_names = {
-            'delegate_rank': 'rank',
-            'delegate': 'address',
-            'dt_voting_power': 'voteableSupplyAmount',
-            'pct_voting_power': 'voteableSupplyPercentage',
-            'ens_domain': 'ensName',
-        }
-        selected_df = selected_df.rename(columns=new_column_names)
 
         # Dynamically set the 'Access-Control-Allow-Origin' header
         allowed_origins = ['https://opdelegate.com']
@@ -53,8 +31,26 @@ def lambda_handler(event, context):
         if not cors_header:
             cors_header = {'Access-Control-Allow-Origin': '*'}
         
+        top_delegates = pd.read_csv(top_delegates['Body'])
+        top_delegates_df = pd.DataFrame(top_delegates)
+
+        selected_columns = ['delegate_rank', 'delegate', 'delegate_name', 'dt_voting_power', 'pct_voting_power']
+        selected_df = top_delegates_df[selected_columns]
+
+        # Use the assign method to add the 'ens_domain' column and drop 'delegate_name' in one step
+        selected_df = selected_df.assign(ens_domain=lambda df: df['delegate_name'].apply(extract_ens_name)).drop(columns=['delegate_name'])
+
+        # Rename columns if needed
+        new_column_names = {
+            'delegate_rank': 'rank',
+            'delegate': 'address',
+            'dt_voting_power': 'voteableSupplyAmount',
+            'pct_voting_power': 'voteableSupplyPercentage',
+            'ens_domain': 'ensName',
+        }
+        selected_df = selected_df.rename(columns=new_column_names)
+        
         data = selected_df.to_json(orient='records')
-        print(data)
 
         return {
             'statusCode': 200,

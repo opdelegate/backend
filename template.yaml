@@ -279,6 +279,30 @@ Resources:
             Path: /get_top_delegators/{proxy+}
             Method: any
 
+  getTopDelegatesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/get_top_delegates/app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 900
+      Description: Retrieve delegates data from the top-1000-delegates file
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+              Resource: "*" # It's recommended to specify the exact bucket and object path for better security
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /get_top_delegates
+            Method: any
+
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
     Properties:

@@ -8,7 +8,6 @@ def extract_ens_name(html_string):
     return match.group(1) if match else ''
 
 def lambda_handler(event, context):
-    print('testtesttest')
     try:
         s3 = boto3.client('s3')
         s3_path = f"top_1000_delegates.csv"
@@ -19,10 +18,12 @@ def lambda_handler(event, context):
 
         selected_columns = ['delegate_rank', 'delegate', 'delegate_name', 'running_dt_voting_power', 'running_pct_voting_power']
         selected_df = top_delegates_df[selected_columns]
+        print(selected_df.head())
 
         # Add a new 'ens_domain' column by applying the get_ens_domain function
-        selected_df['ens_domain'] = selected_df['delegate_name'].apply(extract_ens_name)
+        selected_df.loc[:, 'ens_domain'] = selected_df['delegate_name'].apply(extract_ens_name)
 
+        print(selected_df['ens_domain'].head())
         # Remove the 'delegate' column
         selected_df = selected_df.drop(columns=['delegate_name'])
 
@@ -35,6 +36,8 @@ def lambda_handler(event, context):
             'ens_domain': 'ensName',
         }
         selected_df = selected_df.rename(columns=new_column_names)
+
+        print(selected_df['ens_domain'].head())
 
         # Dynamically set the 'Access-Control-Allow-Origin' header
         allowed_origins = ['https://opdelegate.com']

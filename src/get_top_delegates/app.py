@@ -5,7 +5,7 @@ import pandas as pd
 def extract_ens_name(html_string):
     regex = r'(?:\b(\w+\.eth)\b|\b(\w+\.eth) -)'
     match = re.search(regex, html_string)
-    return match.group(1) if match else ''
+    return match.group(1) if match else None
 
 def lambda_handler(event, context):
     try:
@@ -44,8 +44,8 @@ def lambda_handler(event, context):
         new_column_names = {
             'delegate_rank': 'rank',
             'delegate': 'address',
-            'dt_voting_power': 'voteableSupplyAmount',
-            'pct_voting_power': 'voteableSupplyPercentage',
+            'dt_voting_power': 'supply',
+            'pct_voting_power': 'supplyPct',
             'ens_domain': 'ensName',
         }
         selected_df = selected_df.rename(columns=new_column_names)

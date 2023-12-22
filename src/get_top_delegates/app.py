@@ -40,6 +40,9 @@ def lambda_handler(event, context):
         # Use the assign method to add the 'ens_domain' column and drop 'delegate_name' in one step
         selected_df = selected_df.assign(ens_domain=lambda df: df['delegate_name'].apply(extract_ens_name)).drop(columns=['delegate_name'])
 
+        # drop the last row
+        selected_df = selected_df[:-1]
+
         # Rename columns if needed
         new_column_names = {
             'delegate_rank': 'rank',

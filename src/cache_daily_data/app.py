@@ -3,8 +3,22 @@ import json
 from datetime import datetime, timedelta
 import boto3
 import os
+import pickle
 
 from src.get_secret import get_dune_api_key
+
+def load_partial_voting_power():
+    s3 = boto3.client('s3')
+    response = s3.get_object(Bucket='opdelegate', Key='delegate_partial_voting_power.pkl')
+    partial_voting_power = pickle.loads(response['Body'].read())
+    return partial_voting_power
+
+def add_partial_voting_power(delegate_data, partial_voting_power):
+    for delegate, data_list in delegate_data.items():
+        if delegate in partial_voting_power and partial_voting_power[delegate] != 0:
+            for data_point in data_list:
+                data_point['newBalance'] += partial_voting_power[delegate]
+    return delegate_data
 
 def lambda_handler(event, context):
     # if DEV is set, skip this function
@@ -67,6 +81,12 @@ def lambda_handler(event, context):
                 })
             current_date += timedelta(days=1)
         delegate_data[delegate] = filled_data
+
+    # Load partial voting power data
+    partial_voting_power = load_partial_voting_power()
+
+    # Add partial voting power to delegate_data
+    delegate_data = add_partial_voting_power(delegate_data, partial_voting_power)
 
     # 5. Write each group of delegate data to S3 as a JSON file.
     s3 = boto3.client('s3')
